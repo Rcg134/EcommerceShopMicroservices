@@ -1,3 +1,5 @@
+using Weasel.Core;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Add services to the container. // add the carter service
@@ -10,6 +12,11 @@ builder.Services.AddCarter(configurator: c =>
         .ToArray();
     c.WithModules(modules);
 });
+builder.Services.AddMarten(options =>
+{
+    options.Connection(builder.Configuration.GetConnectionString("Database")!);
+    options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+}).UseLightweightSessions();
 
 builder.Services.AddMediatR(config =>
 {
