@@ -1,10 +1,11 @@
 ﻿namespace Catalog.API.Products.CreateProduct
 {
-    public record CreateProductCommand(string Name, List<string> Category, string description, string ImageFile, decimal Price)
+    public record CreateProductCommand(string Name, List<string> Category, string Description, string ImageFile, decimal Price)
     : ICommand<CreateProductResult>;
     public record CreateProductResult(Guid Id);
 
-    internal class CreateProductCommandHandler(IDocumentSession _session)
+    internal class CreateProductCommandHandler(
+        IDocumentSession session)
         : ICommandHandler<CreateProductCommand, CreateProductResult>
     {
         public async Task<CreateProductResult> Handle(CreateProductCommand command, CancellationToken cancellationToken)
@@ -14,8 +15,8 @@
 
 
             // Save To Database
-            _session.Store(product);
-            await _session.SaveChangesAsync(cancellationToken);
+            session.Store(product);
+            await session.SaveChangesAsync(cancellationToken);
 
 
             // Return CreatreProductResult Result
