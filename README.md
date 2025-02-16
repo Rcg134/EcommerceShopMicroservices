@@ -51,7 +51,7 @@
 
 - Entity Framework Core or any persistence layer (optional for data access)
 
-## 📂 Folder Structure
+## 📂 Folder Structure of Vertical Slice Architecture
 
 ```bash
 Catalog.API/

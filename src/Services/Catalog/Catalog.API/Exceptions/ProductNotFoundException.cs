@@ -7,4 +7,9 @@ public class ProductNotFoundException : Exception
     {
     }
 
+    public ProductNotFoundException(string category)
+        : base($"Product with category {category} was not found.")
+    {
+    }
+
 }
