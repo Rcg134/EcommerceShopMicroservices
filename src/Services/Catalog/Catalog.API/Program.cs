@@ -12,6 +12,11 @@ builder.Services.AddCarter(configurator: c =>
         .ToArray();
     c.WithModules(modules);
 });
+
+//Fluent Validator
+builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+
+
 builder.Services.AddMarten(options =>
 {
     options.Connection(builder.Configuration.GetConnectionString("Database")!);
