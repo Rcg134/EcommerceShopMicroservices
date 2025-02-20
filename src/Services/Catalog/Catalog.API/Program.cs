@@ -1,5 +1,3 @@
-using Weasel.Core;
-
 var builder = WebApplication.CreateBuilder(args);
 
 //Add services to the container. // add the carter service
@@ -16,16 +14,18 @@ builder.Services.AddCarter(configurator: c =>
 //Fluent Validator
 builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-
+// Add Marten
 builder.Services.AddMarten(options =>
 {
     options.Connection(builder.Configuration.GetConnectionString("Database")!);
     options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
 }).UseLightweightSessions();
 
+// Add MediatR
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
 
