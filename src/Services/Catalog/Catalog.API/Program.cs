@@ -28,11 +28,16 @@ builder.Services.AddMediatR(config =>
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
+// Add Exception Handler
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
 
 
 // Configure the HTTP request pipeline.
 app.MapCarter(); // Scan all the ICarterModule in the project and map the necessary route
+
+// use exception handler after register
+app.UseExceptionHandler(options => { });
 
 app.Run();
