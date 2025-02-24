@@ -1,3 +1,7 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Add services to the container. // add the carter service
@@ -21,15 +25,27 @@ builder.Services.AddMarten(options =>
     options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
 }).UseLightweightSessions();
 
+// Add Marten Initial Data seeding if development
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+}
+
+
 // Add MediatR
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(Program).Assembly);
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+    config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
 // Add Exception Handler
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+
+//Health Checks
+builder.Services.AddHealthChecks()
+     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
 
 var app = builder.Build();
 
@@ -39,5 +55,11 @@ app.MapCarter(); // Scan all the ICarterModule in the project and map the necess
 
 // use exception handler after register
 app.UseExceptionHandler(options => { });
+
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.Run();

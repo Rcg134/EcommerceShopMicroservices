@@ -18,6 +18,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__CatalogDbConnection=Host=catalogdb;Port=5432;Database=CatalogDb;Username=postgres;Password=postgres
     ports:
       - "6000:8080"
       - "6060:8081"
