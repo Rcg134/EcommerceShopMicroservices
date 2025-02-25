@@ -15,3 +15,5 @@ global using FluentValidation;
 global using Weasel.Core;
 global using Marten.Schema;
 global using Marten.Pagination;
+global using HealthChecks.UI.Client;
+global using Microsoft.AspNetCore.Diagnostics.HealthChecks;

@@ -1,10 +1,7 @@
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Add services to the container. // add the carter service
+// Add services to the container. // Add the carter service
 builder.Services.AddCarter(configurator: c =>
 {
     // Specify the assembly containing your modules
