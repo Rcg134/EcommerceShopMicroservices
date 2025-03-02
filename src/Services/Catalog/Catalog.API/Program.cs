@@ -1,11 +1,11 @@
-
 var builder = WebApplication.CreateBuilder(args);
+var assembly = typeof(Program).Assembly;
 
 // Add services to the container. // Add the carter service
 builder.Services.AddCarter(configurator: c =>
 {
     // Specify the assembly containing your modules
-    var modulesAssembly = typeof(Program).Assembly;
+    var modulesAssembly = assembly;
     var modules = modulesAssembly.GetTypes()
         .Where(t => typeof(ICarterModule).IsAssignableFrom(t) && !t.IsAbstract)
         .ToArray();
@@ -13,7 +13,7 @@ builder.Services.AddCarter(configurator: c =>
 });
 
 //Fluent Validator
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddValidatorsFromAssembly(assembly);
 
 // Add Marten
 builder.Services.AddMarten(options =>
@@ -32,7 +32,7 @@ if (builder.Environment.IsDevelopment())
 // Add MediatR
 builder.Services.AddMediatR(config =>
 {
-    config.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    config.RegisterServicesFromAssembly(assembly);
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
     config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
