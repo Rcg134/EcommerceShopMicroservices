@@ -13,6 +13,20 @@ services:
     networks:
       - app-network
 
+  basketdb:
+    container_name: basketdb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=BasketDb
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgres_basket_volumes:/var/lib/postgresql/data
+    networks:
+      - app-network
+
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
@@ -35,12 +49,18 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
+      - ConnectionStrings__BasketDbConnection=Host=basketdb;Port=5432;Database=BasketDb;Username=postgres;Password=postgres
     ports:
       - "6001:8080"
       - "6061:8081"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+    networks:
+      - app-network
+    depends_on:
+      - basketdb
+
 networks:
    app-network:
       driver: bridge

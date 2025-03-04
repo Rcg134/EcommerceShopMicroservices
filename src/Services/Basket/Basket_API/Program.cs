@@ -15,12 +15,13 @@ builder.Services.AddCarter(configurator: c =>
 //Fluent Validator
 builder.Services.AddValidatorsFromAssembly(assembly);
 
-// Add Marten
-//builder.Services.AddMarten(options =>
-//{
-//    options.Connection(builder.Configuration.GetConnectionString("Database")!);
-//    options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
-//}).UseLightweightSessions();
+//Add Marten
+builder.Services.AddMarten(options =>
+{
+    options.Connection(builder.Configuration.GetConnectionString("Database")!);
+    options.Schema.For<ShoppingCart>().Identity(x => x.UserName);
+    options.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+}).UseLightweightSessions();
 
 
 // Add MediatR
@@ -37,6 +38,8 @@ builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 //Health Checks
 //builder.Services.AddHealthChecks()
 //     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
+
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 var app = builder.Build();
 

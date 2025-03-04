@@ -1,8 +1,4 @@
-﻿using Carter;
-using Mapster;
-using MediatR;
-
-namespace Basket_API.Basket.GetBasket;
+﻿namespace Basket_API.Basket.GetBasket;
 
 
 //public record GetBasketRequest(string UserName) : IQuery<GetBasketResponse>;

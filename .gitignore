@@ -399,3 +399,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 src/postgres_catalog_volumes/
+src/postgres_basket_volumes/
