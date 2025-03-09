@@ -26,13 +26,21 @@ services:
       - ./postgres_basket_volumes:/var/lib/postgresql/data
     networks:
       - app-network
+  
+  distributedcache:
+    container_name: distributedcache
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
 
   catalog.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__CatalogDbConnection=Host=catalogdb;Port=5432;Database=CatalogDb;Username=postgres;Password=postgres
+      - ConnectionStrings__Database=Host=catalogdb;Port=5432;Database=CatalogDb;Username=postgres;Password=postgres
     ports:
       - "6000:8080"
       - "6060:8081"
@@ -49,7 +57,8 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8080
       - ASPNETCORE_HTTPS_PORTS=8081
-      - ConnectionStrings__BasketDbConnection=Host=basketdb;Port=5432;Database=BasketDb;Username=postgres;Password=postgres
+      - ConnectionStrings__Database=Host=basketdb;Port=5432;Database=BasketDb;Username=postgres;Password=postgres
+      - ConnectionStrings__Redis=distributedcache:6379
     ports:
       - "6001:8080"
       - "6061:8081"
@@ -60,6 +69,7 @@ services:
       - app-network
     depends_on:
       - basketdb
+      - distributedcache
 
 networks:
    app-network:

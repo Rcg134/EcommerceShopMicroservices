@@ -28,6 +28,7 @@
 
             return basket;
         }
+
         public async Task<bool> DeleteBasket(string userName, CancellationToken cancellationToken)
         {
             await basketRepository.DeleteBasket(userName, cancellationToken);

@@ -35,11 +35,31 @@ builder.Services.AddMediatR(config =>
 // Add Exception Handler
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
-//Health Checks
-//builder.Services.AddHealthChecks()
-//     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
+
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
+builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetConnectionString("Redis")!;
+    //options.InstanceName = "Basket_";
+});
+
+// if multiple cache is needed
+//builder.Services.AddScoped<Func<string, ICustomCacheService>>(serviceProvider => key =>
+//{
+//    return key switch
+//    {
+//        "Redis" => serviceProvider.GetRequiredService<RedisCacheService>(),
+//        "InMemory" => serviceProvider.GetRequiredService<InMemoryCacheService>(),
+//        _ => throw new KeyNotFoundException($"Cache service with key '{key}' is not registered.")
+//    };
+//});
+
+//Health Checks
+builder.Services.AddHealthChecks()
+     .AddNpgSql(builder.Configuration.GetConnectionString("Database")!)
+     .AddRedis(builder.Configuration.GetConnectionString("Redis")!);
 
 var app = builder.Build();
 
@@ -50,10 +70,10 @@ app.MapCarter(); // Scan all the ICarterModule in the project and map the necess
 // use exception handler after register
 app.UseExceptionHandler(options => { });
 
-//app.UseHealthChecks("/health",
-//    new HealthCheckOptions
-//    {
-//        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-//    });
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.Run();
