@@ -14,9 +14,15 @@
       context: .
       dockerfile: Services/Catalog/Catalog.API/Dockerfile
 
-  basket_api:
+  basket.api:
     image: ${DOCKER_REGISTRY-}basketapi
     build:
       context: .
       dockerfile: Services/Basket/Basket_API/Dockerfile
+
+  discount.grpc.api:
+    image: ${DOCKER_REGISTRY-}discountapi
+    build:
+      context: .
+      dockerfile: Services/Discount/Discount.Grpc/Dockerfile
 
