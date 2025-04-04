@@ -54,7 +54,7 @@ public class DiscountService(DiscountContext dbcontext, ILogger<DiscountService>
     {
         if (request is null)
         {
-            LoggerExtensions.LogError(logger, "Invalid Request");
+            logger.LogError("Invalid Request");
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Request"));
         }
 
@@ -77,7 +77,7 @@ public class DiscountService(DiscountContext dbcontext, ILogger<DiscountService>
     {
         if (request is null)
         {
-            LoggerExtensions.LogError(logger, "Invalid Request");
+            logger.LogError("Invalid Request");
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Request"));
         }
 
@@ -85,7 +85,7 @@ public class DiscountService(DiscountContext dbcontext, ILogger<DiscountService>
 
         if (coupon is null)
         {
-            LoggerExtensions.LogWarning(logger, "Discount is not found for ProductName : {ProductName}", request.ProductName);
+            logger.LogWarning("Discount is not found for ProductName : {ProductName}", request.ProductName);
             return new DeleteDiscountResponse { Success = false };
         }
 
