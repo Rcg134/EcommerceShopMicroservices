@@ -38,7 +38,6 @@ builder.Services.AddMediatR(config =>
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
 
-
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
 builder.Services.AddStackExchangeRedisCache(options =>
