@@ -2,15 +2,41 @@
 
 public record Address
 {
-    public string FirstName { get; init; } = default!;
+    public string FirstName { get; } = default!;
 
-    public string LastName { get; init; } = default!;
+    public string LastName { get; } = default!;
 
-    public string EmailAddress { get; init; } = default!;
+    public string EmailAddress { get; } = default!;
 
-    public string Country { get; init; } = default!;
+    public string AddressLine { get; } = default!;
 
-    public string State { get; init; } = default!;
+    public string Country { get; } = default!;
 
-    public string ZipCode { get; init; } = default!;
+    public string State { get; } = default!;
+
+    public string ZipCode { get; } = default!;
+
+    protected Address()
+    {
+
+    }
+
+    private Address(string firstName, string lastName, string emailAddress, string addressLine, string country, string state, string zipCode)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        EmailAddress = emailAddress;
+        Country = country;
+        AddressLine = addressLine;
+        State = state;
+        ZipCode = zipCode;
+    }
+    // Create of method
+    public static Address Of(string firstName, string lastName, string emailAddress, string addressLine, string country, string state, string zipCode)
+    {
+        ArgumentNullException.ThrowIfNull(emailAddress);
+        ArgumentNullException.ThrowIfNull(addressLine);
+
+        return new Address(firstName, lastName, emailAddress, addressLine, country, state, zipCode);
+    }
 }
