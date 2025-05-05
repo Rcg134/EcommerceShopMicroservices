@@ -21,7 +21,4 @@ public class Customer : Entity<CustomerId>
 
     }
 
-
-
-
 }
